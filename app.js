@@ -1,5 +1,8 @@
 
+//////////////////////////////////////////////////////
 //  BUDGET CONTROLLER
+//////////////////////////////////////////////////////
+
 var budgetController = (function () {
 
     var Expense = function (id, description, value) {
@@ -57,7 +60,11 @@ var budgetController = (function () {
     };
 })();
 
-// UI CONTROLLER
+//////////////////////////////////////////////////////
+//// UI CONTROLLER
+//////////////////////////////////////////////////////
+
+
 var UIController = (function () {
     var DOMstrings = {
         inputType: '.add__type',
@@ -65,7 +72,9 @@ var UIController = (function () {
         addValue: '.add__value',
         inputBtn: '.add__btn',
         incomeContainer: '.income__list',
-        expensesContainer: '.expenses__list'
+        expensesContainer: '.expenses__list',
+        inputDescription: '.add__description',
+        inputValue: '.add__value'
     };
 
     return {
@@ -101,14 +110,25 @@ var UIController = (function () {
             document.querySelector(element).insertAdjacentHTML('beforeend', newHtml);
 
         },
+        clearFields: function(){
+            var fields, fieldsArr;
+            fields = document.querySelectorAll(DOMstrings.inputDescription + ', ' + DOMstrings.inputValue);
+            fieldsArr = Array.prototype.slice.call(fields); // will trick slice method to view fields (a list) as an array 
+            fieldsArr.forEach(function(current, index, array){ // current element, index of current element, original array
+                current.value = '';
+            });
+            fieldsArr[0].focus();
+        },
         getDOMstrings: function () {
             return DOMstrings;
         }
     };
-
 })();
 
-// GLOBAL APP CONTROLLER
+//////////////////////////////////////////////////////
+//// GLOBAL APP CONTROLLER
+//////////////////////////////////////////////////////
+
 var controller = (function (budgetCtrl, UICtrl) {
     var setupEventListeners = function () {
         var DOM = UICtrl.getDOMstrings();
@@ -134,8 +154,10 @@ var controller = (function (budgetCtrl, UICtrl) {
         // 3. Add item to the UI
         UICtrl.addListItem(newItem, input.type);
 
-        // 4. Calculate the budget
-        // 5. Display the budget on the UI
+        // 4. clear the fields
+        UICtrl.clearFields();
+        // 5. Calculate the budget
+        // 6. Display the budget on the UI
 
     };
 
