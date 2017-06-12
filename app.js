@@ -83,7 +83,7 @@ var UIController = (function () {
                 // instead of returning variables, return an object
                 type: document.querySelector(DOMstrings.inputType).value, // inc/exp
                 description: document.querySelector(DOMstrings.addDescription).value,
-                value: document.querySelector(DOMstrings.addValue).value
+                value: parseFloat(document.querySelector(DOMstrings.addValue).value) // parseFloat converts string to decimal number
             };
 
         },
@@ -100,21 +100,21 @@ var UIController = (function () {
                 html = '<div class="item clearfix" id="expense-%id%"><div class="item__description" >%description%</div ><div class="right clearfix"><div class="item__value">%value%</div><div class="item__percentage">21%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div >';
 
             }
-            
+
             // replace placeholder text with data
             newHtml = html.replace('%id%', obj.id);
-            newHtml = newHtml.replace('%description%',obj.description);
-            newHtml = newHtml.replace('%value%',obj.value);
+            newHtml = newHtml.replace('%description%', obj.description);
+            newHtml = newHtml.replace('%value%', obj.value);
 
             // insert the HTML into DOM
             document.querySelector(element).insertAdjacentHTML('beforeend', newHtml);
 
         },
-        clearFields: function(){
+        clearFields: function () {
             var fields, fieldsArr;
             fields = document.querySelectorAll(DOMstrings.inputDescription + ', ' + DOMstrings.inputValue);
             fieldsArr = Array.prototype.slice.call(fields); // will trick slice method to view fields (a list) as an array 
-            fieldsArr.forEach(function(current, index, array){ // current element, index of current element, original array
+            fieldsArr.forEach(function (current, index, array) { // current element, index of current element, original array
                 current.value = '';
             });
             fieldsArr[0].focus();
@@ -141,23 +141,39 @@ var controller = (function (budgetCtrl, UICtrl) {
         });
 
     };
+
+    var updateBudget = function () {
+        // 1. Calculate the budget
+
+
+        // 2. Return the budget
+
+
+        // 3. Display the budget on the UI
+
+
+
+    };
+
     var ctrlAddItem = function () {
         var input, newItem;
 
         // 1. Get field input data
         input = UICtrl.getInput();
-        console.log(input);
+        // console.log(input); // to test input values 
+        if (input.description !== '' && !isNaN(input.value) && input.value > 0) {
+            // 2. Add item to budget controller
+            newItem = budgetCtrl.addItem(input.type, input.description, input.value);
 
-        // 2. Add item to budget controller
-        newItem = budgetCtrl.addItem(input.type, input.description, input.value);
+            // 3. Add item to the UI
+            UICtrl.addListItem(newItem, input.type);
 
-        // 3. Add item to the UI
-        UICtrl.addListItem(newItem, input.type);
+            // 4. Clear the fields
+            UICtrl.clearFields();
 
-        // 4. clear the fields
-        UICtrl.clearFields();
-        // 5. Calculate the budget
-        // 6. Display the budget on the UI
+            // 5. Calculate and update budget
+            updateBudget();
+        }
 
     };
 
